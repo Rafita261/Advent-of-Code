@@ -1,31 +1,38 @@
-def fic(k) :
-    k=str(k)
-    s=""
+def fic(k):
+    k = str(k)
+    s = []
     id = 0
-    for i in range(len(k)) :
+    for i in range(len(k)):
         elem = int(k[i])
-        if i%2 != 0 :
-            s+='.'*elem
-        else :
-            s+=str(id)*elem
-            id+=1
-    return list(s)
-def permut(t,i,j) :
-    c=t[i]
-    t[i]=t[j]
-    t[j]=c
-
-def compact(f) :
-    s=0
-    for i in range(len(f)-f.count('.')-1) :
-        if f[i]=='.' :
-            while f[len(f)-1] == '.' :
-                f.pop(-1)
-            permut(f,i,len(f)-1)
-            f.pop(len(f)-1)
-            print(''.join(f))
-    for i in range(len(f)) :
-        s+=(i*int(f[i]))
+        if i % 2 != 0:
+            for _ in range(elem):
+                s.append('.')
+        else: 
+            for _ in range(elem):
+                s.append(str(id))
+            id += 1
     return s
-k = open("day9.txt","r")
-print(compact(fic(k)))
+
+def compact(f):
+    i = 0
+    while i < len(f):
+        if f[i] == '.': 
+            j = len(f) - 1
+            while j > i and f[j] == '.':
+                j -= 1
+            if j > i:
+                f[i], f[j] = f[j], '.'
+        i += 1
+
+    checksum = 0
+    for pos, block in enumerate(f):
+        if block != '.':
+            checksum += pos * int(block)
+    return checksum
+
+if __name__=='__main__' :
+    with open("day9.txt", "r") as file:
+        k = file.readline().strip()
+    f = fic(k)
+    result = compact(f)
+    print(result)
